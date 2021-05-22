@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>FORUM - let's discuss</title>
+
+    <style>
+        .sld-text {
+            text-align: center;
+            color: red;
+        }
+
+        .sld-img {
+            text-align: center;
+            position: absolute;
+        }
+
+        .bimg {
+            /* image-align: center; */
+            background-image: url("https://source.unsplash.com/2400x700/?programmer, coding");
+            width: 1536px;
+            height: 631px;
+        }
+
+        .bg-clr {
+            background-color: rgba(236, 245, 242);
+        }
+
+        .page-height {
+            min-height: 560px;
+            /* 575px */
+        }
+    </style>
+</head>
+
+<body class="bg-clr">
+
+    {{>navbar}}
+
+
+    <div class="page-height">
+        <div class="container mt-3 mb-5">
+            <div class="mx-4">
+                <h3>All Questions:</h3>
+            </div>
+        </div>
+        <div class="container mt-3">
+            <div class="mx-5">
+                <h5>Number of Questions: {{quesResultLength}}</h5>
+            </div>
+            <hr>
+        </div>
+
+
+        {{#if (isdefined quesResultLength)}}
+            {{#each quesResult}}
+                <div class="container mt-2">
+                    <hr>
+                    <div class="container">
+                        <h5><a class="text-dark" href="thread?threadid={{_id}}">{{thread_title}}</a>
+                        </h5>
+                        <span class="mx-5">{{thread_desc}}</span>
+                    </div>
+                    <div class="container" align="right">
+                        <span mr-5>{{Date_Time}}</span><br>
+                        <span><img class="mx-1 my-0" src="images/user.jpg" width="54px" class="mx-1"></span>
+                        <span class="font-weight-bold my-0"><b>{{thread_user_name}}</b></span><br>
+                        <span><b>{{thread_user_id}}</b></span>
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <h4><strong>No Questions Found!</strong></h4> <br>
+                <strong>Heyy!</strong> You should be the first person to ask a question.
+            </div>
+        {{/if}}
+    </div>
+
+    {{>footer}}
+
+    {{>footerLink}}
+</body>
+
+</html>

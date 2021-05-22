@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!--profile.css-->
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    {{>navbar}}
+    <form action="/cprofile" method="POST" enctype="multipart/form-data">
+        <div class="" style="width: 600px;">
+            <label style="display: inline-block;" for="fname"><i class="fa fa-user"></i> First
+                Name</label><br>
+            <input type="text" id="fname" name="fname" placeholder="Enter your first name" required>
+        </div>
+        <div class="profile-img-container" style="border: 1px solid black; padding: 14px 14px;width: 1100px;">
+            <label for="exampleFormControlTextarea1">
+                Category Image</label><br>
+                <p style="color: red">Note:- Image Name should be your first name</p>
+            <div class="custom-file mb-3" style="display: inline-block;width: 30%;">
+                <input hidden type="file" class="custom-file-input" id="customFile" name="profile_img" required>
+                <label class="custom-file-label" for="customFile" id="file-value" style="border: 1px solid #bbb5b5;
+    padding: 10px 5px;
+    background: white;
+    border-radius: 5px;">Choose file</label>
+            </div>
+            <span><img id="output" style="width: 100px;height: 100px;" /></span>
+            <div id="feedback" style="display: none;"></div>
+        </div>
+        <div class="sub-btn">
+            <input type="submit" id="mySubmit">
+        </div>
+        <script>
+            document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+                const fname = document.getElementById('fname').value;
+                console.log(fname);
+
+                const feedback = document.getElementById('feedback');
+                {{!-- const subbtn = document.getElementById('mySubmit'); --}}
+
+                var fileName = document.getElementById("customFile").files[0].name;
+                var fileValue = document.getElementById("customFile").files[0];
+
+                console.log(fileName);
+                var image = document.getElementById('output');
+                image.src = URL.createObjectURL(e.target.files[0]);
+                document.getElementById('file-value').innerHTML = fileName;
+
+                if (fname + '.jpg' == fileName || fname + '.png' == fileName || fname + '.jpeg' == fileName) {
+                    feedback.style.display = 'inline';
+                    feedback.setAttribute('class', 'valid-feedback');
+                    feedback.textContent = "Valid Image Name.";
+                    document.getElementById("mySubmit").disabled = false;
+                }
+                else {
+                    feedback.style.display = 'inline-block';
+                    feedback.setAttribute('class', 'invalid-feedback');
+                    feedback.textContent = "Invalid Image Name.";
+                    document.getElementById("mySubmit").disabled = true;
+                }
+            })
+        </script>
+    </form>
+</body>
+
+</html>

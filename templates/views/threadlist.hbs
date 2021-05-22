@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>FORUM - let's discuss</title>
+
+    <style>
+        .clr {
+            background-color: rgba(236, 245, 242);
+        }
+
+        .a-href {
+            text-decoration: none;
+            color: black;
+        }
+
+        .msg-container {
+            margin-left: 25%;
+            width: 50%;
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+
+<body class="clr">
+
+    {{>navbar}}
+
+    <div class="msg-container" id="alert-msg"></div>
+
+    <div class="container my-4">
+        <div class="alert alert-info text-dark" role="alert">
+            <h1 class="display-4 text-dark">Welcome to the
+                {{catname}} forum
+            </h1>
+            <p class="lead">
+                {{catdesc}}
+            </p>
+
+            <a class="btn btn-warning btn-lg" href="https://en.wikipedia.org/wiki/{{catname}}_(programming_language)"
+                target=" " role="button">Learn more!</a>
+
+            <hr class="my-4">
+
+            <p>This is a peer to peer forum. No Spam / Advertising / Self-promote in the forums is not allowed. Do not
+                post copyright-infringing material. Do not post “offensive” posts, links or images. Do not cross post
+                questions. Remain respectful of other members at all times.</p>
+            <p class="text-dark" align="right"><b>-By Admin</b></p>
+        </div>
+    </div>
+
+    {{#if loggedin}}
+    <div class="container">
+        <h1 class="py-2"><i>Start a Discussion:</i></h1>
+        <form action="/threadlist?catname={{catid}}" method="POST">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Problem Title</label>
+                <input type="text" class="form-control" id="title" name="title" aria-describedby="title" required>
+                <div id="emailHelp" class="form-text">Keep your title as short and crisp as possible.</div>
+            </div>
+            <input type="hidden" name="user_id" value="'.$_SESSION[" user_id"].'">
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Ellaborate Your Concern</label>
+                <textarea class="form-control" id="desc" name="desc" rows="3" required></textarea>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-warning">Submit</button>
+        </form>
+        <hr>
+    </div>
+    {{else}}
+    <div class="container alert alert-info" role="alert">
+        <h1 class="text-dark">Start a Discussion:</h1><br>
+        You are not Logged in. You need to login first to be able to Start Discussion.
+    </div>
+    {{/if}}
+
+
+    <div class="container my-3" style="min-height: 380px;">
+
+        <h1 class="py-2 mx-4"><i>Browse Questions:<span><i class="fa fa-camera-retro fa-5x"></i></span></i></h1>
+        <h4 class="py-2 mx-4"><i>Number of Questions: {{threadlistLength}}</i></h4>
+
+        {{#if (isdefined threadlistLength)}}
+
+        {{#each threadlist}}
+        <div class="container mt-2">
+            <hr>
+            <div class="container">
+                <h5><a class="text-dark" href="thread?threadid={{_id}}">{{thread_title}}</a>
+                </h5>
+                <span class="mx-5">{{thread_desc}}</span>
+            </div>
+            <div class="container" align="right">
+                <span><a href="users" class="a-href"><img class="mx-1 my-1" src="images/user.jpg" width="54px"
+                            class="mx-1"></a></span>
+                <span class="font-weight-bold my-0"><b><a href="users"
+                            class="a-href">{{thread_user_name}}</a></b></span><br>
+                <span><b>{{thread_user_id}}</b></span><br>
+                <span mr-5>{{Date_Time}}</span>
+            </div>
+        </div>
+        {{/each}}
+
+        {{else}}
+
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <h4><strong>No Threads Found!</strong></h4> <br>
+            <strong>Heyy!</strong> You should be the first person to ask a question.
+        </div>
+
+        {{/if}}
+
+    </div>
+
+    {{>footer}}
+
+    {{>footerLink}}
+
+    <script>
+        const alert_msg = document.getElementById('alert-msg');
+        alert_msg.style.display = 'none';
+
+        let msg = '{{msg}}';
+        console.log(msg);
+
+
+        if (msg) {
+
+            //Signup Message:-
+            if (msg == 'threadlist_success') {
+                console.log("successfull");
+                alert_msg.style.display = 'block';
+                alert_msg.innerHTML = `<div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <strong>Success!</strong> Your response is Submitted Successfully.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>`;
+
+            }
+
+            else if (msg == 'threadlist_failed') {
+                console.log("failed");
+                alert_msg.style.display = 'block';
+                alert_msg.innerHTML = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong>Error!</strong> Invalid Credentials! Please try again.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>`;
+            }
+        }
+        setTimeout(function () {
+            alert_msg.style.display = 'none';
+        }, 10000)
+    </script>
+</body>
+
+</html>
